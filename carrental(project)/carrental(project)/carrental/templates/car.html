@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="shortcut icon" href="{% static 'img/lg.jpeg' %}" type="image/x-icon" />
+  <title>Welcome to {% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <!--google fonts-->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet"
+  />
+
+  <!--google fonts-->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      AOS.init();
+    });
+  </script>
+
+  <style>
+    /* Hover button style */
+    .hover-blue-btn {
+      display: block;
+      width: 100%;
+      padding: 10px 0;
+      border-radius: 6px;
+      background-color:rgb(160, 172, 183);
+      color: black;
+      text-decoration: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+    }
+    .hover-blue-btn:hover {
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+    }
+    
+  </style>
+</head>
+<body>
+  {% block content %}
+  <div class="row" style="background-color:#D8E6F8;">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-11 shadow-lg mt-3 mb-4" style="background-color:#F3F3F3; font-size: 30px;">
+      Book Your Car
+    </div>
+  </div>
+  <div class="row" style="background-color:#D8E6F8; height:572px;">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-11">
+      <div class="row">
+        <div class="col-sm-7">
+          <img
+            src="{{ car.img1.url }}"
+            class="shadow-lg mt-2 mb-2"
+            style="height:400px; width:600px; background-color:#F3F3F3"
+            alt="Car Image"
+          />
+        </div>
+        <div class="col-sm-5">
+          <div class="card shadow-lg" style="width:450px; background-color:#F1F3F6;">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item" style="width:350px; background-color:#F1F3F6;">
+                &nbsp;&nbsp;&nbsp;&nbsp;Vehicle Title:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ car.vehicle_title }}
+              </li>
+              <li class="list-group-item" style="width:350px; background-color:#F1F3F6;">
+                &nbsp;&nbsp;&nbsp;&nbsp;Seating:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {{ car.setting }}
+              </li>
+              <li class="list-group-item" style="width:350px; background-color:#F1F3F6;">
+                &nbsp;&nbsp;&nbsp;&nbsp;Price Per Hour:&nbsp;&nbsp;&nbsp;&nbsp; Rs. {{ car.PPD }}
+              </li>
+            </ul>
+          </div>
+          <div class="card border-success mb-3 mt-3" style="width:450px; height:350px;">
+            <div class="card-header bg-transparent border-success">
+              <div class="row">
+                <button class="col-sm-4 border-0" id="cardetailbtn">Car Details</button>
+                <button class="col-sm-4 border-0" id="bookingBtn">Booking Time</button>
+                <button class="col-sm-4 border-0" id="descriptionBtn">Description</button>
+              </div>
+            </div>
+            <div class="card-body" style="color:black; background-color:#F1F3F6;">
+              <p id="start" class="card-text"></p>
+              <p id="end" class="card-text"></p>
+              <p id="amount" class="card-text"></p>
+              <p class="card-text" id="brand"></p>
+              <p class="card-text" id="model"></p>
+              <p class="card-text" id="fuel"></p>
+              <p class="card-text" id="cardText"></p>
+            </div>
+            <div class="card-footer bg-transparent border-success" style="text-align: center;">
+              {% if user_logged_in %}
+                {% if user_verified %}
+                  <a href="{% url 'paymentD' car.id %}" class="hover-blue-btn">Rent Now</a>
+                {% else %}
+                  <a href="{% url 'msgDL' %}" class="hover-blue-btn">Verify Yourself</a>
+                {% endif %}
+              {% else %}
+                <a href="{% url 'login' %}" class="hover-blue-btn">Login to Rent</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const descriptionBtn = document.getElementById("descriptionBtn");
+    const cardText = document.getElementById("cardText");
+    const cardetailbtn = document.getElementById("cardetailbtn");
+    const brand = document.getElementById("brand");
+    const fuel = document.getElementById("fuel");
+    const model = document.getElementById("model");
+    const start = document.getElementById("start");
+    const end = document.getElementById("end");
+    const amount = document.getElementById("amount");
+
+    function clearData() {
+      cardText.innerText = "";
+      brand.innerText = "";
+      model.innerText = "";
+      fuel.innerText = "";
+      start.innerText = "";
+      end.innerText = "";
+      amount.innerText = "";
+    }
+
+    cardetailbtn.addEventListener("click", function () {
+      clearData();
+      brand.innerText = "Brand: {{ car.brand }}";
+      fuel.innerText = "Fuel Type: {{ car.fuel }}";
+      model.innerText = "Model Year: {{ car.model_year }}";
+    });
+
+    descriptionBtn.addEventListener("click", function () {
+      clearData();
+      cardText.innerText = "{{ car.VO }}";
+    });
+
+    const bookingBtn = document.getElementById("bookingBtn");
+    bookingBtn.addEventListener("click", function () {
+      clearData();
+      const startTime = "{{ start|escapejs }}";
+      const endTime = "{{ end|escapejs }}";
+      const totalAmount = "{{ amount|escapejs }}";
+
+      start.innerText = "Start Time: " + startTime;
+      end.innerText = "End Time: " + endTime;
+      amount.innerText = "Total Amount: ₹" + totalAmount;
+    });
+  </script>
+  {% endblock %}
+</body>
+</html>

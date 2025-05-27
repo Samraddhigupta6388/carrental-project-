@@ -1,0 +1,35 @@
+{% extends "admindash.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row  overflow-auto">
+    <div class="col-sm-12 p-5 table-responsive">
+        <div style="text-align:center;padding:10px; font-size:25px"><u> USER VERIFICATION </u></div>
+        <table class="table table-responsive table-bordered" id="example">
+            <thead>
+                <tr >
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Name</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Email</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Phone_No</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Status</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Action</th>  
+                </tr>
+            </thead>
+            <tbody>
+                {% for n in verifing %}
+                <tr>
+                    <td>{{n.name}}</td>
+                    <td>{{n.email}}</td>
+                    <td>{{n.phone}}</td>
+                    <td>{{n.status}}</td>
+                    <td>
+                        <a href="{% url 'verify' n.email|urlencode %}"><i class="fa-solid fa-pen-to-square" style="color: #006eff;"></i></a>
+                        <a href="{% url 'deleteuser' n.id %}"><i class="fa-solid fa-trash" style="color: #ff0000;"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+ </div>
+{% endblock %}

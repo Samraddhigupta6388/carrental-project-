@@ -1,0 +1,86 @@
+{% extends "admindash.html" %}
+{% load static %}
+
+{% block content %}
+<div class="card">
+    <form action="{% url 'update_verification' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table style="margin-left:80px;margin-top:40px;margin-bottom:20px; width:800px;height:20px">
+            <tr> 
+                <th>Status:</th>
+                <td>{{ verify.status }}</td>
+                <th>Email :</th>
+                <td>{{ verify.email }}</td>
+            </tr>
+            <tr>
+                <th>Name  :</th>
+                <td>{{ verify.name }}</td>
+                <th>Phone :</th>
+                <td>{{ verify.phone }}</td>
+            </tr>
+            <tr>
+                <th>Driving License No :</th>
+                <td>{{ verify.DLN }}</td>
+                <th>IDproof No :</th>
+                <td>{{ verify.IDproof }}</td>
+            </tr>
+        </table>
+        <table style="margin-left:80px;margin-top:40px;margin-bottom:20px; width:800px;height:20px">
+            <tr>
+                <th>Address :</th>
+                <td>{{ verify.Add }}</td>
+            </tr>
+        </table>
+        <table style="margin-left:80px;margin-bottom:20px; width:800px;height:20px">
+            <tr>
+                <td>Driving License Front Image :</td>
+                <td>Driving License Back Image :</td>
+            </tr>
+            <tr>
+                <td><img src="{{ verify.DLFI.url }}" alt="Front Image" style="width:250px;"></td>
+                <td><img src="{{ verify.DLBI.url }}" alt="Back Image" style="width:300px;"></td>
+            </tr>
+        </table>
+        <table style="margin-left:80px;margin-top:20px;margin-bottom:20px; width:800px;height:20px">
+            <tr>
+                <th>Address Proof Image :</th>
+            </tr>
+            <tr>              
+                <td><img src="{{ verify.Addproof.url }}" alt="Address Proof" style="width:300px;"></td>
+            </tr>
+        </table>
+        <table style="margin-left:80px;margin-bottom:20px; width:800px;height:20px">
+            <tr>
+                <th>Is verified :<input type="checkbox" id="is_verified" data-user-email="{{ verify.email }}" {% if verify.is_verified %} checked {% endif %}></th>
+            </tr>
+        </table>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#is_verified").change(function() {
+            var isChecked = $(this).is(":checked");
+            var userEmail = "{{ verify.email }}";  // Use email instead of ID
+
+            $.ajax({
+                url: "{% url 'update_verification' %}",
+                type: "POST",
+                data: {
+                    "user_email": userEmail,  // Pass email instead of ID
+                    "is_verified": isChecked ? "true" : "false",
+                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                },
+                success: function(response) {
+                    alert("User successfully approved!");
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                    alert("Something went wrong!");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

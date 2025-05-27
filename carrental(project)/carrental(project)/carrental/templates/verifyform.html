@@ -1,0 +1,158 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+  /* Darker box shadow for inputs */
+  input.form-control, textarea.form-control {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  /* Custom btn-primary styling since bootstrap btn-primary not working */
+  .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    font-size: 1.25rem;
+    border-radius: 0.375rem;
+    border-width: 1px;
+    border-style: solid;
+  }
+  .btn-primary:hover, .btn-primary:focus {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    color: white;
+  }
+
+  /* Adjust verification status card margin to align center with form */
+  .verification-status-card {
+    width: 1195px;
+    margin-left: calc((100% - 1195px)/2); /* center horizontally */
+    min-height: 70px;
+  }
+
+  /* Inline flex for "Verification Status :" and message to appear side by side */
+  .verification-status-text {
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: inline-block;
+    margin-right: 15px;
+    vertical-align: middle;
+  }
+  .verification-status-message {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 0;
+    max-width: 85%; /* increased width */
+  }
+
+  /* Force submit button container to right */
+  .submit-button-container {
+    text-align: right;  /* align children to right */
+    margin-top: 1.5rem;
+  }
+</style>
+
+<div style="background-color:#D8E6F8; min-height:930px; padding-bottom:50px;">
+
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-4 mb-4">
+        <h1 class="fw-bold">| User Verification Form |</h1>
+    </div>
+
+    <div class="card shadow-lg mt-3 verification-status-card">
+        <div class="p-3">
+            <span class="verification-status-text">Verification Status :</span>
+            {% if is_verified %}
+                <p class="alert alert-success verification-status-message mb-0">
+                    Your account is verified. You can now rent cars.
+                </p>
+            {% else %}
+                <p class="alert alert-warning verification-status-message mb-0">
+                    Your account is not yet verified. Please wait for admin approval.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card m-4 shadow-lg p-4" data-aos="fade-up" style="width:1195px; min-height:730px; margin-left: auto; margin-right: auto;">
+
+        <form action="{% url 'saveveriform' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- First row: Name, Email, Phone -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label for="name" class="form-label fw-semibold fs-5">NAME :</label>
+                    <input type="text" id="name" name="name" class="form-control shadow-sm" style="height: 45px;" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="email" class="form-label fw-semibold fs-5">EMAIL :</label>
+                    <input type="email" id="email" name="email" class="form-control shadow-sm" style="height: 45px;" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="phone" class="form-label fw-semibold fs-5">PHONE :</label>
+                    <input type="text" id="phone" name="phone" class="form-control shadow-sm" style="height: 45px;" required>
+                </div>
+            </div>
+
+            <!-- Address -->
+            <div class="mb-4">
+                <label for="Add" class="form-label fw-semibold fs-5">ADDRESS :</label>
+                <textarea name="Add" id="Add" rows="3" class="form-control shadow-sm" placeholder="Address" required></textarea>
+            </div>
+
+            <!-- Driving License No and Images -->
+            <div class="row mb-4 align-items-center">
+                <div class="col-md-4">
+                    <label for="DLN" class="form-label fw-semibold fs-5">DRIVING LICENSE NO. :</label>
+                    <input type="number" id="DLN" name="DLN" class="form-control shadow-sm" style="height: 45px;" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="DLFI" class="form-label fw-semibold fs-5">DRIVING LICENSE FRONT IMAGE :</label>
+                    <input type="file" id="DLFI" name="DLFI" class="form-control shadow-sm" style="height: 45px;" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="DLBI" class="form-label fw-semibold fs-5">DRIVING LICENSE BACK IMAGE :</label>
+                    <input type="file" id="DLBI" name="DLBI" class="form-control shadow-sm" style="height: 45px;" required>
+                </div>
+            </div>
+
+            <!-- ID Proof and Address Proof Image -->
+            <div class="row mb-4 align-items-center">
+                <div class="col-md-6">
+                    <label for="IDproof" class="form-label fw-semibold fs-5">ID PROOF NO.</label>
+                    <input type="text" id="IDproof" name="IDproof" class="form-control shadow-sm" style="height: 45px;" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="Addproof" class="form-label fw-semibold fs-5">ADDRESS PROOF IMAGE</label>
+                    <input type="file" id="Addproof" name="Addproof" class="form-control shadow-sm" style="height: 45px;" required>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-button-container">
+                <button type="submit" class="btn btn-primary px-5 py-2 fs-5 fw-semibold">Submit</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

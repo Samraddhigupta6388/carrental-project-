@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="shortcut icon" href="{% static 'img/lg.jpeg' %}" type="image/x-icon">
+  <title>Welcome to {% block title %} {% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      AOS.init();
+    });
+  </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div>| PAYMENT STATUS |</div><hr>
+        <div>Booking has been successful...</div><hr>
+        <div class="row">
+        <div class=" col-sm-7 card" style="height:500px; width:850px">
+            <form method="POST" action="{% url 'savepost_v' %}" role="form">
+                {% csrf_token %}
+                <table>
+
+                    <tr>
+                        <td>Booking ID :</td>
+                        <td></td></tr>
+                    <tr><td>Paid Account :</td>
+                        <td></td></tr>
+                    <tr><td>Booking Status :</td>
+                        <td></td></tr>
+                    <tr><td>Payment Status :</td>
+                        <td></td></tr>
+                    <tr><td>Payer Email</td>
+                        <td></td></tr>
+                    <tr><td>Name :</td>
+                        <td></td></tr>
+                    <tr><td>Mobile No. :</td>
+                        <td></td></tr>
+                    <tr><td>Date :</td>
+                        <td></td></tr>
+                </table>
+            </form>
+        </div>
+        <div class="col-sm-5 card ms-5" style="height:500px; width:350px ">
+            <div class="card mt-3" style="height:400px"></div>
+           <a href="#"><div class="btn btn-primary m-3" style="width:300px"> Go to Booking</div></a>
+            
+        </div>
+    </div>
+</div>
+</body>
+</html>

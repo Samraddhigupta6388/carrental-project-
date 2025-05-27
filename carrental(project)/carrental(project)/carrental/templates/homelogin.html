@@ -1,0 +1,49 @@
+
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row" >
+    {% if error %}
+    <div class="alert alert-danger fw-bold text-center mt-3" role="alert">
+      {{ error }}
+    </div>
+  {% endif %}
+    {% if success %}
+    <div id="successMsg" class="alert alert-success fw-bold text-center mt-3" role="alert">
+      ✅ Successfully logined!! Redirecting to HOME page...
+    </div>
+    <script>
+      setTimeout(() => {
+        window.location.href = "{% url 'home' %}";
+      }, 3000); 
+    </script>
+    {% endif %}
+   
+    <div class="col-sm-12 d-flex justify-content-center align-items-center  " style="background:linear-gradient(to bottom, rgba(132, 166, 217, 0.6), rgba(219, 219, 240, 0.84))">
+        <form class="shadow-lg mt-5 mb-5" role="form" data-aos="fade-up" style="background-color:#D8E6F8 ; padding:20px;
+    background-image:linear-gradient(to bottom, rgba(176, 175, 175, 0.6), rgba(255, 255, 255, 0.3)), url('{% static "img/login_bg.jpg" %}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center; 
+        height: 500px; " method="post" action="{% url 'login' %}" >
+            {% csrf_token %}
+            <h2 style="text-align:center;margin-top:100px;">LOGIN</h2>
+            <p style="margin-top:10px;text-align:center" class="ms-5">Please fill out the form to login</p>
+            <table clss="m-5">
+                <tr>
+                    <td><label for="useremail" class="ms-4"><h5>EMAIL</h5></label></td>
+                    <td><input type="email" id="email" name="email" class="ms-5" required></td>
+                </tr>
+                <tr>
+                    <td><label for="password" class="ms-4"><h5>PASSWORD</h5></label></td>
+                    <td><input type="password" id="password" name="password" class="ms-5" required></td>
+                </tr>
+            </table>
+            <div style="text-align: center; padding: 10px;">
+                <button type="submit" style="width: 500px; height: 40px;" class="mb-3">SUBMIT</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3>Payment Successful!</h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 64px;"></i>
+                    </div>
+                    
+                    <h4>Your booking has been confirmed</h4>
+                    
+                    {% if booking %}
+                    <div class="mt-4">
+                        <h5>Booking Details:</h5>
+                        <table class="table">
+                            <tr>
+                                <th>Booking ID:</th>
+                                <td>{{ booking.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Payment ID:</th>
+                                <td>{{ booking.razorpay_payment_id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Vehicle:</th>
+                                <td>{{ car.vehicle_title }} ({{ car.brand }})</td>
+                            </tr>
+                            <tr>
+                                <th>Amount Paid:</th>
+                                <td>₹{{ booking.amount }}</td>
+                            </tr>
+                            <tr>
+                                <th>Start Time:</th>
+                                <td>{{ booking.start|date:"Y-m-d H:i" }}</td>
+                            </tr>
+                            <tr>
+                                <th>End Time:</th>
+                                <td>{{ booking.end|date:"Y-m-d H:i" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    <span class="badge bg-success">{{ booking.payment_status }}</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p>Your payment was successful, but we couldn't find your booking details. Please contact support.</p>
+                    {% endif %}
+                    
+                    <div class="text-center mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-primary">Return to Homepage</a>
+                        <a href="{% url 'explore' %}" class="btn btn-outline-primary">Explore More Cars</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

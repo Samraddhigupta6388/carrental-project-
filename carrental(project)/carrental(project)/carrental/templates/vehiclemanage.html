@@ -1,0 +1,37 @@
+{% extends "admindash.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row  overflow-auto">
+    <div class="col-sm-12 p-5 table-responsive">
+        <div style="text-align:center;padding:10px; font-size:25px"><u> MANAGE VEHICLE</u></div>
+        <table class="table table-responsive table-bordered" id="example">
+            <thead>
+                <tr >
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Vehicle Title</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Brand</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Price Per Day</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Fuel Type</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Model Year</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Sitting Capacity </th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Action</th>  
+                </tr>
+            </thead>
+            <tbody>
+                {% for n in data %}
+                <tr>
+                    <td>{{n.vehicle_title}}</td>
+                    <td>{{n.brand}}</td>
+                    <td>{{n.PPD}}</td>
+                    <td>{{n.fuel}}</td>
+                    <td>{{n.model_year}}</td>
+                    <td>{{n.setting}}</td>
+                    <td><a href="{% url 'deletecar' n.id %}"><i class="fa-solid fa-trash" style="color: #ee1717;"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+ </div>
+
+{% endblock %} 

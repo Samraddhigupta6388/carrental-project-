@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid px-3" style="overflow-x:hidden;">
+
+<div style=" background-image: url('{% static "img/bg4.png" %}'); background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center; 
+    height: 350px;" data-aos="fade-left"></div>
+    <div class="row" style="background-color:#D8E6F8" >
+        <div class="col-sm-3"></div>
+         <div class="col-auto">
+        <form method="POST" role="form" action="#">
+            {% csrf_token %}
+            <div class="mt-5 d-flex justify-content-center">
+            <table >
+                <tr>
+                    <th><label>PickUp Date :</label></th>
+                    <td><input type="datetime-local" name="start"></td>
+                    <th><label>Drop Date :</label></th>
+                    <td><input type="datetime-local" name="end"></td>
+                    <th><input type="submit"  class="mx-2" style="border-radius:50px; width:100px ; background-color:#DBD7D7;color:black"></th>
+                </tr>
+        </table>
+    </div>
+        </form>
+    </div>
+<div class="row" style="background-color:#D8E6F8 ">
+    <div class="col-sm-3">
+        <div></div>
+        <div class="card  mb-3 mt-5 shadow-lg" data-aos="flip-left" style="max-width: 18rem;">
+            <div class="card-header"><span style="font-size:15px;">BRANDS</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-angle-down"></i></div>
+            <div class="card-body">
+              <p class="card-text">
+               
+                <input type="checkbox">&nbsp;&nbsp;Hyumdai</br>
+                <input type="checkbox">&nbsp;&nbsp;Mahindra</br>
+                <input type="checkbox">&nbsp;&nbsp;Ford</br>
+                <input type="checkbox">&nbsp;&nbsp;Toyota</br>
+                <input type="checkbox">&nbsp;&nbsp;BMW</br>
+                <input type="checkbox">&nbsp;&nbsp;Maruti Suzuki</br>
+              </p>
+            </div>
+          </div>
+    </div>
+    <div class="col-sm-9 mt-5 mb-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4"> <!-- Use row-cols-md-3 for 3 cards per row -->
+        {% for n in data %}
+        <div class="col"> <!-- Each card is wrapped in a column -->
+            <div class="card shadow-lg mb-5" style="width:280px">
+                <img src="/media/{{ n.img1 }}"  class="card-img-top" style="height:200px" alt="">
+                <div class="card-body">
+                    <h5 class="card-title">{{ n.vehicle_title }}</h5>
+                    <p class="card-text">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <i class="fa-solid fa-gas-pump"></i>&nbsp;&nbsp;{{ n.fuel }}
+                            </div>
+                            <div class="col-sm-6">
+                                <i class="fa-solid fa-user-group"></i>&nbsp;&nbsp;{{ n.setting }}
+                            </div>
+                        </div>
+                    </p>
+                    <div class="row">
+                        <div class="col-sm-6">Rs.{{ n.PPD }}/hr</div>
+                        <div class="col-sm-6">
+                            <a href="{% url 'car' n.id %}" class="btn" style="background-color:#1654A1;color:white">View Car</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

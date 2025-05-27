@@ -1,0 +1,166 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<div style=" 
+background-image:linear-gradient(to bottom, rgba(60, 59, 59, 0.6), rgba(12, 12, 12, 0.3)), url('{% static "static/img/3ul8rj1k.png" %}');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center; 
+    height: 500px;">
+    <h1 style="margin-left:40px ;color:white;margin-top:5px">Car Rental Service</h1>
+    <div style="margin-top:40px;margin-left:50px;">
+   <a href="{% url 'explore' %}"> <button  id="hoverBtn" class="button" style="border-radius:50px;height:40px; width:130px;margin-right:20px">Book Now</button> </a>  
+    <a href="{% url 'explore' %}"><button id="hoverBtn" class="button" style="border-radius:50px;height:40px; width:130px">Explore Us</button>
+    </a>
+   <script>
+    const buttons = document.querySelectorAll('.button');
+  
+    buttons.forEach(btn => {
+      btn.onmouseover = () => {
+        btn.style.backgroundColor = '#999898';
+      }
+  
+      btn.onmouseout = () => {
+        btn.style.backgroundColor = '#E8E8E8';
+      }
+    });
+  </script>
+   
+  </div>
+
+    
+    
+</div>
+<div class="row">
+  <h2 class="mt-5" style="text-align:center;"><b>Our <span style="color:#E7C851">SERVICES<Span></b></h2>
+    <h4 style="text-align:center;" class="mt-3">Car Rental is India's leading mobility Company with services ranging from chauffeur drive and self-drive car rentals.<br>Our main principle is to support you before, during and after the rental.</h4>
+
+  <div class="col-sm-6 mt-5">
+  
+
+    <div style="display: flex; align-items: center; margin-top: 20px;">
+      <button class="button" style="border-radius: 100px; height: 80px; width: 80px;">
+        <i class="fa-solid fa-location-dot fa-beat" style="color: #2b5191; font-size: 30px;"></i>
+      </button>
+      <span style="margin-left: 15px;font-weight: bold; font-size: 30px; color:rgb(7, 8, 8);">Experience And Expertise</span>
+    </div>
+
+    <div style="display: flex; align-items: center; margin-top: 20px;">
+      <button class="button" style="border-radius: 100px; height: 80px; width: 80px;">
+        <i class="fa-solid fa-calendar-day fa-beat" style="color:#2b5191; font-size: 30px;"></i>
+      </button>
+      <span style="margin-left: 15px; font-size: 30px;font-weight: bold; color:rgb(8, 8, 8);">Value For Money</span>
+    </div>
+
+    <div style="display: flex; align-items: center; margin-top: 20px;">
+      <button class="button" style="border-radius: 100px; height: 80px; width: 80px;">
+        <i class="fa-solid fa-car fa-beat" style="color: #2b5191; font-size: 30px;"></i>
+      </button>
+      <span style="margin-left: 15px; font-size: 30px;font-weight: bold; color:rgb(12, 13, 13);">Diversity</span>
+    </div>
+
+  </div>
+
+  <div class="col-sm-6">
+
+    <img src="{% static 'static/img/car70.png' %}"  style="height:300px; width:600px;margin-top:120px; " data-aos="fade-left">
+
+  </div>
+</div>
+<div>
+  <h2 class="mt-5" style="text-align:center;"><b>Our <span style="color:#E7C851">SERVICES<Span></b></h2>
+
+  <img src="{% static 'static/img/carrr5.png' %}"  style="height:570px; width:1200px" Zoom
+data-aos="zoom-in" data-aos-offset="300"
+data-aos-easing="ease-in-sine"><br>
+<img src="{% static 'img/i1.webp' %}" style="height:90px; width:150px; margin-left:80px"> 
+<img src="{% static 'img/i2.png' %}" style="height:90px; width:150px; margin-left:20px">  
+<img src="{% static 'img/i3.webp' %}" style="height:90px; width:150px; margin-left:20px">  
+<img src="{% static 'img/i6.webp' %}" style="height:90px; width:150px; margin-left:20px">  
+<img src="{% static 'img/i5.webp' %}" style="height:90px; width:150px; margin-left:20px">  
+<img src="{% static 'img/i7.png' %}" style="height:90px; width:150px; margin-left:20px;">  
+
+
+
+ 
+</div>
+<div  style="text-align:center; background-color:#CDDFF8 ;margin-top:80px"><span style="font-size:40px; "><b>All the best deals and rental options in one place</b></span><br><h5 style="margin-bottom:60px">Finding the perfect car rental is easier than ever!</h5>
+<div class="row  g-4 ms-2 me-2">
+  
+    <div class="col">
+      <div class="card mb-5" style="box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+      border-radius: 10px;">
+        <img src="{% static 'img/car1.jpeg' %}" data-aos="zoom-out"
+        class="card-img-top" alt="">
+        <div class="card-body" >
+          <h5 class="card-title">Maruti Alto</h5>
+          <div class="row">
+            <div class="col-sm-4"><i class="fa-solid fa-screwdriver-wrench fa-beat-fade" style="color: #2b5191;" ></i>Matual</div>
+            <div class="col-sm-4"><i class="fa-solid fa-user-group fa-beat-fade" style="color: #2b5191;" ></i>5Persons</div>
+            <div class="col-sm-4"><i class="fa-solid fa-user-group fa-beat-fade" style="color: #2b5191;"></i>5Persons</div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6" style="font-size:25px">RS 2000/-</div>
+            <div class="col-sm-6"><button class="button mb-4" style="border-radius:50px;height:30px; width:110px">Book Now</button>
+            </div>  
+            </div>
+      </div>
+    </div>
+    
+    <div class="col">
+      <div class="card" style="box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+      border-radius: 10px;">
+        <img src="{% static 'img/car2.jpg' %}" data-aos="zoom-out" class="card-img-top" alt="..." style="height:215px">
+        <div class="card-body">
+          <h5 class="card-title">Ford Mustang </h5>
+          <div class="row">
+            <div class="col-sm-4"><i class="fa-solid fa-screwdriver-wrench fa-beat-fade" style="color: #2b5191;"></i>Automatic</div>
+            <div class="col-sm-4"><i class="fa-solid fa-user-group fa-beat-fade" style="color: #2b5191;" ></i>5Persons</div>
+            <div class="col-sm-4"><i class="fa-solid fa-user-group fa-beat-fade" style="color: #2b5191;"></i>5Persons</div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6" style="font-size:25px">RS 2000/-</div>
+            <div class="col-sm-6"><button class="button mb-4" style="border-radius:50px;height:30px; width:110px">Book Now</button>
+            </div>  
+            </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+      border-radius: 10px;">
+        <img src="{% static 'img/car3.webp' %}"  data-aos="zoom-out" class="card-img-top" alt="..." >
+        <div class="card-body">
+          <div class="row">
+            <h5 class="card-title">Hyundai Creta </h5>
+
+            <div class="col-sm-4"><i class="fa-solid fa-screwdriver-wrench fa-beat-fade" style="color: #2b5191;" ></i>Automatic</div>
+            <div class="col-sm-4"><i class="fa-solid fa-user-group fa-beat-fade" style="color: #2b5191;" ></i>5Persons</div>
+            <div class="col-sm-4"><i class="fa-solid fa-user-group fa-beat-fade" style="color: #2b5191;"></i>5Persons</div>
+          </div>
+        </div>
+        
+          <div class="row">
+          <div class="col-sm-6" style="font-size:25px">RS 2000/-</div>
+          <div class="col-sm-6"><button class="button mb-4" style="border-radius:50px;height:30px; width:110px">Book Now</button>
+          </div>  
+          </div>
+      </div>
+    </div>
+    <div style=" background-image: url('{% static "static/img/bg10.png" %}');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center; 
+    height: 550px; margin-bottom:30px" data-aos="zoom-in"
+    data-aos-easing="linear"
+    data-aos-duration="300">
+    <h1 style="margin-left:640px ;margin-top:200px;margin-right:40px">We're always on the lookout for cheap car rentals. Check out our latest finds!
+
+    </h1>
+
+  </div>
+  </div>
+  </div>
+{% endblock %}

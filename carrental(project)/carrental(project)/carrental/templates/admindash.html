@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADMINDASHBOARD</title>
+  <link rel="shortcut icon" href="{% static 'img/lg.jpeg' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      AOS.init();
+    });
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5efeb;
+    }
+
+    /* Fixed Top Header */
+    .top-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 90px;
+      background-color: rgb(50, 54, 126);
+      color: white;
+      text-align: center;
+      line-height: 90px;
+      z-index: 1000;
+    }
+
+    /* Fixed Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 90px;
+      left: 0;
+      width: 250px;
+      height: calc(100vh - 90px);
+      background-color:rgb(50, 54, 126);
+      color: white;
+      padding: 10px;
+      overflow-y: auto;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: white;
+      display: block;
+      padding: 10px;
+      font-size: 15px;
+    }
+
+    .sidebar a:hover {
+      background-color: rgb(145, 147, 184);
+      border-radius: 5px;
+    }
+
+    /* Right Content Area */
+    .main-content {
+      margin-top: 90px;
+      margin-left: 250px;
+      padding: 30px;
+      height: calc(100vh - 90px);
+      overflow-y: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    
+  
+  </style>
+</head>
+<body>
+
+  <div class="top-header">
+    <h3>| ADMINDASHBOARD |</h3>
+  </div>
+
+  <div class="sidebar">
+    <a href="#"><i class="fa-solid fa-user-pen fa-fade"></i>&nbsp;&nbsp;Dashboard</a><hr>
+    <a href="{% url 'managereg' %}"><i class="fa-regular fa-id-card fa-fade"></i>&nbsp;&nbsp;Register User</a><hr>
+    <a href="{% url 'postvehicle' %}"><i class="fa-solid fa-car fa-fade"></i>&nbsp;&nbsp;Post Vehicles</a><hr>
+    <a href="{% url 'vehiclemanage' %}"><i class="fa-solid fa-envelope-open-text fa-fade"></i>&nbsp;&nbsp;Manage vehicle</a><hr>
+    <a href="{% url 'managebk' %}"><i class="fa-solid fa-cloud-arrow-up fa-fade"></i>&nbsp;&nbsp;Manage Booking</a><hr>
+    <a href="{% url 'user_verify' %}"><i class="fa-solid fa-clipboard-list fa-fade"></i>&nbsp;&nbsp;User Verification</a><hr>
+    <a href="{% url 'manageCQ' %}"><i class="fa-solid fa-address-book fa-fade"></i>&nbsp;&nbsp;Contact Query</a><hr>
+    <a href="#"><i class="fa-solid fa-upload fa-fade"></i>&nbsp;&nbsp;Update contact info</a><hr>
+    <a href="{% url 'logout' %}"><i class="fa-solid fa-bell fa-fade"></i>&nbsp;&nbsp;Logout</a>
+  </div>
+
+  <div class="main-content" data-aos="fade-left">
+    <div class="content-wrapper">
+      {% block content %}
+      <!-- Your content goes here -->
+      {% endblock %}
+    </div>
+  </div>
+
+</body>
+</html>

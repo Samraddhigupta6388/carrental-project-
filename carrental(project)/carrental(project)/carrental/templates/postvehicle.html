@@ -1,0 +1,74 @@
+{% extends "admindash.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="text-center py-3 fs-4"><u>POST A VEHICLE</u></div>
+
+  <form method="POST" action="{% url 'savepost_v' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Vehicle Title <span class="text-danger">*</span></label>
+        <input type="text" name="vehicle_title" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Select Brand <span class="text-danger">*</span></label>
+        <select name="brand" class="form-select">
+          <option value="select">Select</option>
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="opel">Opel</option>
+          <option value="audi">Audi</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Price Per Day (USD) <span class="text-danger">*</span></label>
+        <input type="text" name="ppd" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Fuel Type <span class="text-danger">*</span></label>
+        <select name="ftype" class="form-select">
+          <option value="select">Select</option>
+          <option value="petrol">Petrol</option>
+          <option value="diesel">Diesel</option>
+          <option value="cng">CNG</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Model Year <span class="text-danger">*</span></label>
+        <input type="text" name="myear" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Seating Capacity <span class="text-danger">*</span></label>
+        <input type="text" name="sc" class="form-control">
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Vehicle Overview <span class="text-danger">*</span></label>
+        <textarea name="vo" rows="3" class="form-control"></textarea>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Image 1 <span class="text-danger">*</span></label>
+        <input type="file" name="img1" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Image 2 <span class="text-danger">*</span></label>
+        <input type="file" name="img2" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Image 3 <span class="text-danger">*</span></label>
+        <input type="file" name="img3" class="form-control">
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button class="btn px-5 py-2" style="background-color:#D1D5F4">SUBMIT</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
