@@ -1,3 +1,17 @@
-<img src="{% static 'static/img/carrr3.png' %}"  style="height:570px; width:900px;margin-left:200px" Zoom
-data-aos="zoom-in" data-aos-offset="300"
-data-aos-easing="ease-in-sine">
+{% comment %} def user_verify(request):
+    users = veriform.objects.all()  
+
+    context = {
+        'verifing': users  # Pass users to the template
+    }
+    # Update status dynamically based on is_verified field
+    # if user.is_verified:
+    #     user.status = "Approved"
+    # else:
+    #     user.status = "Pending"
+
+    # user.save()  # Save updated status to the database
+    messages.success(request, "Your details have been submitted successfully. Please wait until admin approves your request.")
+
+    return render(request, "user_verify.html", context) {% endcomment %}
+

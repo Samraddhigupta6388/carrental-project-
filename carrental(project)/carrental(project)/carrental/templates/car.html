@@ -59,8 +59,8 @@
   {% block content %}
   <div class="row" style="background-color:#D8E6F8;">
     <div class="col-sm-1"></div>
-    <div class="col-sm-11 shadow-lg mt-3 mb-4" style="background-color:#F3F3F3; font-size: 30px;">
-      Book Your Car
+    <div class="col-sm-11 shadow-lg mt-3 mb-3 p-3 fw-bold" style="background-color:#F3F3F3; " data-aos="fade-left">
+      CAR DETAILS:
     </div>
   </div>
   <div class="row" style="background-color:#D8E6F8; height:572px;">
@@ -71,11 +71,11 @@
           <img
             src="{{ car.img1.url }}"
             class="shadow-lg mt-2 mb-2"
-            style="height:400px; width:600px; background-color:#F3F3F3"
+            style="height:400px; width:600px; background-color:#F3F3F3; border: 5px solid rgb(28, 32, 99);;; border-radius: 10px;"
             alt="Car Image"
           />
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-5" data-aos="fade-left">
           <div class="card shadow-lg" style="width:450px; background-color:#F1F3F6;">
             <ul class="list-group list-group-flush">
               <li class="list-group-item" style="width:350px; background-color:#F1F3F6;">
@@ -98,7 +98,7 @@
                 <button class="col-sm-4 border-0" id="descriptionBtn">Description</button>
               </div>
             </div>
-            <div class="card-body" style="color:black; background-color:#F1F3F6;">
+            <div class="card-body" style="color:black; background-color:#F1F3F6;" data-aos="fade-left">
               <p id="start" class="card-text"></p>
               <p id="end" class="card-text"></p>
               <p id="amount" class="card-text"></p>

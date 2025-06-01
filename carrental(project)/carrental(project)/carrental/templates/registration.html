@@ -18,10 +18,10 @@
   {% endfor %}
   {% endif %}
 
-    <div class="col-sm-12 d-flex justify-content-center align-items-center " style="background:linear-gradient(to bottom, rgba(132, 166, 217, 0.6), rgba(219, 219, 240, 0.84))">
-        <div id="formMessage" class="text-danger text-center mt-5" style="font-weight: bold;"></div>
+    <div class="col-sm-12 d-flex justify-content-center align-items-center " style="background:linear-gradient(to bottom, rgba(132, 166, 217, 0.6), rgba(219, 219, 240, 0.84))" >
 
         <form method="POST" role="form" action="#" id="registration" class="shadow-lg mb-5 ms-5 mt-5" data-aos="fade-up" style="background-color:#D8E6F8 ;background-image:linear-gradient(to bottom, rgba(176, 175, 175, 0.6), rgba(255, 255, 255, 0.3)), url('{% static "img/login_bg.jpg" %}');
+
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center center; 
@@ -30,8 +30,9 @@
 
             <h2 style="text-align:center;margin-top:50px"  >REGISTRATION</h2>
             <p style="margin-top:10px;text-align:center" class="ms-5">Please fill out the form to get registered</p>
-         
-                <table class="m-5">
+                 <div id="formMessage" class="text-danger text-center" style="font-weight: bold;margin-left:20px;margin-right:20px;background-color:rgb(216, 162, 162);"></div>
+
+                <table class="ms-5 me-5 mb-5">
                     <tr>
                         <td><label for="name"><h5>FULL NAME</h5></label></td>
                         <td><input type="text" id="name" name="full_name" class="ms-5"></td>
@@ -60,6 +61,7 @@
                     <button style="width: 500px; height: 40px;" class="mb-5">SUBMIT</button>
                 </div>
             </form>
+            
     </div>
     
     <script>

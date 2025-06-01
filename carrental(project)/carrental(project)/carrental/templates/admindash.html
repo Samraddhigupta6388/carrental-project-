@@ -31,7 +31,7 @@
       left: 0;
       width: 100%;
       height: 90px;
-      background-color: rgb(50, 54, 126);
+      background-color: rgb(24, 27, 78);;
       color: white;
       text-align: center;
       line-height: 90px;
@@ -45,7 +45,7 @@
       left: 0;
       width: 250px;
       height: calc(100vh - 90px);
-      background-color:rgb(50, 54, 126);
+      background-color:rgb(24, 27, 78);;
       color: white;
       padding: 10px;
       overflow-y: auto;
@@ -83,11 +83,11 @@
 <body>
 
   <div class="top-header">
-    <h3>| ADMINDASHBOARD |</h3>
+    <h3 class="my-4">| ADMINDASHBOARD |</h3>
   </div>
 
   <div class="sidebar">
-    <a href="#"><i class="fa-solid fa-user-pen fa-fade"></i>&nbsp;&nbsp;Dashboard</a><hr>
+    <a href="{% url 'dashboard' %}"><i class="fa-solid fa-user-pen fa-fade"></i>&nbsp;&nbsp;Dashboard</a><hr>
     <a href="{% url 'managereg' %}"><i class="fa-regular fa-id-card fa-fade"></i>&nbsp;&nbsp;Register User</a><hr>
     <a href="{% url 'postvehicle' %}"><i class="fa-solid fa-car fa-fade"></i>&nbsp;&nbsp;Post Vehicles</a><hr>
     <a href="{% url 'vehiclemanage' %}"><i class="fa-solid fa-envelope-open-text fa-fade"></i>&nbsp;&nbsp;Manage vehicle</a><hr>

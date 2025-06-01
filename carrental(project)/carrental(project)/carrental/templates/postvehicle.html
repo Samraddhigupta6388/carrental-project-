@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container-fluid">
-  <div class="text-center py-3 fs-4"><u>POST A VEHICLE</u></div>
+        <div style="text-align:center;padding:10px; font-size:25px"><u> POST VEHICLE</u></div>
 
   <form method="POST" action="{% url 'savepost_v' %}" enctype="multipart/form-data">
     {% csrf_token %}

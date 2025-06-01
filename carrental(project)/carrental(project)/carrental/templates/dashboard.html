@@ -1,0 +1,60 @@
+{% extends "admindash.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="row mt-2">
+    <div class="col-md-8 mx-auto p-3 shadow text-center" style="background-color: white; border-radius: 10px;">
+        <h4 style="color:rgb(24, 27, 78);">Welcome To Admin Panel </h4>
+    </div>
+</div>
+
+<div class="row mt-4 m-4">
+    <div class="col-md-4 text-center mb-4">
+        <div class="card shadow w-100 p-4" style="min-height: 180px; border-radius: 10px;">
+            <i class="fa-solid fa-users-rectangle mt-2" style="color: rgb(24, 27, 78); font-size: 45px;"></i>
+            <h2 class="mt-3 fs-5">REG. USERS</h2>
+            <h4 class="fs-1">{{allreg}}</h4>
+        </div>
+    </div>
+    <div class="col-md-4 text-center mb-4">
+        <div class="card shadow w-100 p-4" style="min-height: 180px; border-radius: 10px;">
+            <i class="fa-solid fa-car mt-2" style="color: rgb(24, 27, 78); font-size: 45px;"></i>
+            <h2 class="mt-3 fs-5"> NO. OF CARS</h2>
+            <h4 class="fs-1">{{allcars}}</h4>
+        </div>
+    </div>
+    <div class="col-md-4 text-center mb-4">
+        <div class="card shadow w-100 p-4" style="min-height: 180px; border-radius: 10px;">
+            <i class="fa-solid fa-envelope mt-2" style="color: rgb(24, 27, 78); font-size: 45px;"></i>
+            <h2 class="mt-3 fs-5">BOOKED CARS</h2>
+            <h4 class="fs-1">{{allbooking}}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-2 m-4">
+    <div class="col-md-4 text-center mb-4">
+        <div class="card shadow w-100 p-4" style="min-height: 180px; border-radius: 10px;">
+            <i class="fa-solid fa-car-side mt-2" style="color: rgb(24, 27, 78); font-size: 45px;"></i>
+            <h2 class="mt-3 fs-5">CONTACT QUERIES</h2>
+            <h4 class="fs-2">{{allcontact}}</h4>
+        </div>
+    </div>
+    <div class="col-md-4 text-center mb-4">
+        <div class="card shadow w-100 p-4" style="min-height: 180px; border-radius: 10px;">
+            <i class="fa-solid fa-user-check  mt-2" style="color: rgb(24, 27, 78); font-size: 45px;"></i>
+            <h2 class="mt-3 fs-5">USERS FOR VERIFY</h2>
+            <h4 class="fs-1">{{allusers}}</h4>
+        </div>
+    </div>
+    <div class="col-md-4 text-center mb-4">
+        <div class="card shadow w-100 p-4" style="min-height: 180px; border-radius: 10px;">
+            <i class="fa-solid fa-message mt-2" style="color: rgb(24, 27, 78); font-size: 45px;"></i>
+            <h2 class="mt-3 fs-5">NO. OF FEEDBACK</h2>
+            <h4 class="fs-1">0</h4>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

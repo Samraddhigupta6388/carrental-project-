@@ -2,35 +2,35 @@
 {% load static %}
 
 {% block content %}
-<div class="row  overflow-auto">
+<div class="row overflow-auto">
     <div class="col-sm-12 p-5 table-responsive">
-        <div style="text-align:center;padding:10px; font-size:25px"><u>REGISTER USERS</u></div>
-        <table class="table table-responsive table-bordered" id="example">
+        <div style="text-align:center; padding:10px; font-size:25px;"><u>REGISTER USERS</u></div>
+        
+        <table class="table table-bordered" id="example" 
+               style="width: 100%; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); border-width: 2px;">
             <thead>
-                <tr >
-                    <th style="background-color:rgb(145, 147, 184) ; color: white;">NAME </th>
-                    <th style="background-color:rgb(145, 147, 184) ; color: white;">USEREMAIL</th>
-                    <th style="background-color:rgb(145, 147, 184) ; color: white;">PHONE_NO</th>
-                    <th style="background-color:rgb(145, 147, 184) ; color: white;">Action</th>  
+                <tr>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">NAME</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">USEREMAIL</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">PHONE_NO</th>
+                    <th style="background-color:rgb(145, 147, 184); color: white;">Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for p in bata %}
                 <tr>
-                   
-                    <td>{{p.full_name}}</td>
-                    <td>{{p.email}}</td>
-                    <td>{{p.phone_number}}</td>
+                    <td>{{ p.full_name }}</td>
+                    <td>{{ p.email }}</td>
+                    <td>{{ p.phone_number }}</td>
                     <td>
-                         <a href="{% url 'deletereg' p.email %}"><i class="fa-solid fa-trash" style="color: #ff0000;"></i></a>
-
+                        <a href="{% url 'deletereg' p.email %}">
+                            <i class="fa-solid fa-trash" style="color: #ff0000;"></i>
+                        </a>
                     </td>
-                    
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
- </div>
-
-{% endblock %} 
+</div>
+{% endblock %}

@@ -56,19 +56,6 @@ class veriform(models.Model):
         super().save(*args, **kwargs)
 
 
-# class Payment(models.Model):
-#     customer = models.ForeignKey(registration, on_delete=models.CASCADE)
-#     car = models.ForeignKey(postVcl, on_delete=models.CASCADE)
-#     payment_status = models.CharField(max_length=50, choices=[('Paid', 'Paid'), ('Pending', 'Pending')])
-#     payment_date = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return f"{self.customer.name} - {self.car.vehicle_title} - {self.payment_status}"
-
-# class Bookingtime(models.Model):
-#    start=models.DateTimeField(null=False)
-#    end=models.DateTimeField(null=False)
-   
    
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models

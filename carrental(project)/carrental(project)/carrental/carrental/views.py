@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from urllib.parse import unquote
 import razorpay  
 from django.conf import settings
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_datetime
 from django.shortcuts import render,get_object_or_404,redirect
@@ -17,6 +18,12 @@ from django.contrib.auth.hashers import check_password
 from django.contrib import messages
 from django.contrib.auth.backends import ModelBackend  
 from car.models import CustomUser  # Import your custom user model
+User = get_user_model()  # Get the custom user model
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.utils import timezone
+from datetime import datetime
 
 def first(request):
     return HttpResponse("hii sam")
@@ -32,15 +39,11 @@ def index(request):
     return render(request,"index.html",data)
 
 #-------------------ALL USER END PAGES (START)------------------------------------
+def layout(request):
+    return render(request,"layout.html")
 
 def home(request):
     return render(request,"home.html")
-
-
-from django.contrib.auth import login, authenticate
-from django.contrib import messages
-
-User = get_user_model()  # Get the custom user model
 
 def homelogin(request):
     if request.method == "POST":
@@ -56,27 +59,19 @@ def homelogin(request):
             # Log the user in
             login(request, user)
             print("User authenticated successfully!")  # Debugging
-            return render( request,"homelogin.html",{"success": True})  # Rdirect to a protected page
-        else:
-            return render(request, "homelogin.html",{"error": "Invalid email or password"} )
 
+            # Redirect based on user type
+            if user.is_superuser:
+                return redirect('dashboard')  # Redirect to admin dashboard
+            else:
+                return redirect('home')  # Redirect to normal home page
+
+        else:
+            return render(request, "homelogin.html", {"error": "Invalid email or password"})
 
     return render(request, "homelogin.html")
-def layout(request):
-    return render(request,"layout.html")
 
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model
-
-User = get_user_model()  # Get the custom user model
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model  # ✅ Import get_user_model()
-from django.urls import reverse
-
-User = get_user_model()  # ✅ Use the custom user model
-
+   
 def registration_view(request):
     if request.method == "POST":
         print("POST request received")  # ✅ Debugging
@@ -106,57 +101,34 @@ def registration_view(request):
 
     return render(request, "registration.html")
 
-def managereg(request):
-    bata=CustomUser.objects.all()
-    return render(request,"managereg.html",{'bata':bata})
-    
-    
-def managebk(request):
-    bata=Booking.objects.all()
-    return render(request,"managebk.html",{'bata':bata})
 
 def contact(request):
     return render(request,"contact.html")
 
+def explore(request):
+    # Step 1: Get only cars with active (future or ongoing) bookings
+    active_booked_car_ids = Booking.objects.filter(end__gte=timezone.now()).values_list('car_id', flat=True)
 
+    # Step 2: Exclude those cars from explore page
+    data = postVcl.objects.exclude(id__in=active_booked_car_ids)
 
-def msgDL(request):
-    return render(request,'msgDL.html')
+    # Step 3: Your existing session handling code
+    if request.method == "POST":
+        start = request.POST.get("start") or request.session.get("start")
+        end = request.POST.get("end") or request.session.get("end")
+        
+        if not start or not end:
+            return JsonResponse({"error": "Start and end dates are required"}, status=400)
 
-def paystatus(request):
-    # show = get_object_or_404(postVcl, id=id)
-    # data=get_object_or_404(veriform,id=id)
-     return render(request, "paystatus.html")#{'data': data, 'show': show})
+        request.session["start"] = start
+        request.session["end"] = end
+        request.session["amount"] = request.POST.get("amount")  
+        request.session.modified = True
 
-def payment(request,id):
-    show = get_object_or_404(postVcl, id=id)
-    data=get_object_or_404(veriform,id=id)
-    return render(request, "payment.html", {'data': data, 'show': show})
+        print("Session start date:", request.session.get("start"))
+        print("Session end date:", request.session.get("end"))
 
-from django.shortcuts import render
-from car.models import Booking
-
-
-def verifyform(request):
-    return render(request,'verifyform.html')
-
-
-
-
-#-------------------ALL USER END PAGES (END)------------------------------------
-#-------------------ALL ADMIN END PAGES (START)-----------------------------------
-
-def admindash(request):
-    return render(request,"admindash.html")
-
-# def regdata(request):
-#     show=registration.objects.all()
-#     return render(request,"regdata.html",{'show':show})
-
-def postvehicle(request):
-    return render(request,"postvehicle.html")
-
-from django.shortcuts import render, get_object_or_404
+    return render(request, "explore.html", {'data': data})
 
 def car(request, car_id):
     car = get_object_or_404(postVcl, id=car_id)
@@ -187,315 +159,15 @@ def car(request, car_id):
         'user_verified': user_verified,
         'start': start,
         'end': end,
-        'amount': amount,
-       
+        'amount': amount,   
     }
-
     return render(request, 'car.html', context)
 
-def vehiclemanage(request):
-    data=postVcl.objects.all()
-    return render(request,"vehiclemanage.html",{'data':data})
+def msgDL(request):
+    return render(request,'msgDL.html')
 
-def manageCQ(request):
-    bata=contactQ.objects.all()
-    return render(request,"manageCQ.html",{'bata':bata})
-    
-
-def user_verify(request,email):  # Ensure the parameter is named 'id'
-    verifing = get_object_or_404(verifing, email=email)
-    return render(request, 'user_verify.html',{'verifing':verifing})
-
-@login_required
-def verify(request, email):  # Accept email as a parameter
-    user = get_object_or_404(veriform, email=email)  # Fetch the user by email
-    return render(request, 'verify.html', {'verify': user})  # Pass the user object to the template
-
-def logout(request):
-  request.session.flush()
-  return redirect('home')    
-
-
-#-------------------ALL ADMIN END PAGES (END)-----------------------------------
-
-#---------==---------ALL SAVES METHOD(START)--------------------------------------
-
-def savepost_v(request):
-    if request.method=="POST":
-        id=request.POST.get("id")
-        vehicle_title=request.POST.get("vehicle_title")
-        brand=request.POST.get("brand")
-        ppd=request.POST.get("ppd")
-        fuel=request.POST.get("ftype")
-        if not fuel:  # If empty, return an error
-            return render(request, "postvehicle.html", {"error": "Fuel type is required!"})
-        model_year=request.POST.get("myear")
-        sitting=request.POST.get("sc")
-        vo=request.POST.get("vo")
-        img1=request.FILES.get("img1")
-        img2=request.FILES.get("img2")
-        img3=request.FILES.get("img3")
-        b=postVcl.objects.create(id=id,vehicle_title=vehicle_title,brand=brand,PPD=ppd,fuel=fuel,model_year=model_year,setting=sitting,VO=vo,img1=img1,img2=img2,img3=img3)
-        b.save()
-    return render(request,"postvehicle.html")
-
-def savecontact(request):
-    if request.method=="POST":
-        name=request.POST.get('name')
-        useremail=request.POST.get('useremail')
-        phone_number=request.POST.get('phone_number')
-        date=request.POST.get('date')
-        msg=request.POST.get('msg')
-        c=contactQ.objects.create(name=name,useremail=useremail,phone_number=phone_number,date=date,msg=msg)
-        c.save()
-    return render(request,"contact.html")
-
-
-# def saveBookingtime(request):
-#     if request.method == "POST":
-#         start = request.POST.get('start')
-#         end = request.POST.get('end')
-
-#         # Validate that fields are not empty
-#         if not start or not end:
-#             return HttpResponse("Start and end times are required", status=400)
-
-#         # Convert the input strings to datetime objects
-#         try:
-#             start = parse_datetime(start)
-#             end = parse_datetime(end)
-#         except (ValueError, TypeError):
-#             return HttpResponse("Invalid date/time format", status=400)
-
-#         # Validate that start is before end
-#         if start >= end:
-#             return HttpResponse("Start time must be before end time", status=400)
-
-#         # Save the data
-#         booking = Bookingtime.objects.create(start=start, end=end)
-#         booking.save()
-
-#         return HttpResponse("Booking saved successfully", status=200)
-
-#     return HttpResponse("Invalid request method", status=405)
-        
-                
-def saveveriform(request):
-    if request.method == "POST":
-        # Print all POST data for debugging
-        print("POST Data:", request.POST)
-        
-        # Print all FILES data for debugging
-        print("FILES Data:", request.FILES)
-        
-        # Extract form data
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        Add = request.POST.get('Add')  # Ensure this field is being extracted
-        DLN = request.POST.get('DLN')
-        DLFI = request.FILES.get('DLFI')
-        DLBI = request.FILES.get('DLBI')
-        IDproof = request.POST.get('IDproof')
-        Addproof = request.FILES.get('Addproof')  # Corrected: This should be a file field
-        
-        # is_verified should be set by the admin, not the user
-        is_verified = False  # Default to False
-        
-        # Check if the Add field is missing
-        if not Add:
-            print("Add field is missing or empty!")
-            return HttpResponse("Address (Add) field is required.", status=400)
-        
-        # Save the data to the database
-        try:
-            d = veriform.objects.create(
-                name=name,
-                email=email,
-                phone=phone,
-                Add=Add,  # Ensure this field is included
-                DLN=DLN,
-                DLFI=DLFI,
-                DLBI=DLBI,
-                IDproof=IDproof,
-                Addproof=Addproof,
-                is_verified=is_verified  # Default to False
-            )
-            d.save()  # This will trigger the save method in the model
-            print("Data saved successfully!")
-            messages.success(request, "Your details have been submitted successfully. Please wait until admin approves your request.")
-
-            return render(request, "verifyform.html")
-        except Exception as e:
-            print(f"Error saving data: {e}")
-            return HttpResponse(f"An error occurred: {e}", status=500)
-    else:
-        return HttpResponse("Invalid request method.", status=405)
-from django.shortcuts import render, get_object_or_404, redirect
-
-
-from django.shortcuts import render
-from car.models import postVcl
-
-
-    
-def user_verify(request):
-    users = veriform.objects.all()  
-
-    context = {
-        'verifing': users  # Pass users to the template
-    }
-    # Update status dynamically based on is_verified field
-    # if user.is_verified:
-    #     user.status = "Approved"
-    # else:
-    #     user.status = "Pending"
-
-    # user.save()  # Save updated status to the database
-    messages.success(request, "Your details have been submitted successfully. Please wait until admin approves your request.")
-
-    return render(request, "user_verify.html", context)
-
-
-
-def verify(request, email):
-    email = unquote(email)  # Decode URL-encoded email
-    print(f"Received email in URL: {email}")  # Debugging
-
-    user = get_object_or_404(veriform, email=email)  # Fetch user safely
-    return render(request, "verify.html", {"verify": user})
-
-
-# View to handle verification updates via AJAX
-def update_verification(request):
-    if request.method == "POST":
-        email = request.POST.get("user_email")
-        is_verified = request.POST.get("is_verified") == "true"
-
-        user = get_object_or_404(veriform, email=email)
-        user.is_verified = is_verified
-        user.status = "Approved" if is_verified else "Pending"
-        user.save()
-
-        return JsonResponse({"success": True, "message": "Verification updated successfully!"})
-
-    return JsonResponse({"success": False, "message": "Invalid request"}, status=400)
-
-#-----------------ALL UPDATES AND DELETE---------------------------------   
-    
-# def updatedata(request,id):
-#   qw=veriform.objects.get(pk=id)
-#   return render(request,'{}',{'qw':qw})
-
-
-def deletecar(request, id):
-    # Correct usage: Use the `contactQ` model
-    postVcl.objects.filter(id=id).delete()
-    return redirect('vehiclemanage')
-
-
-def deleteCQ(request, id):
-    # Correct usage: Use the `contactQ` model
-    contactQ.objects.filter(id=id).delete()
-    return redirect('manageCQ')
-
-def deletereg(request,useremail):
-    CustomUser.objects.filter(useremail=useremail).delete()
-    return redirect('managereg')
-
-def deleteuser(request, id):
-    # Correct usage: Use the `contactQ` model
-    veriform.objects.filter(id=id).delete()
-    return redirect('user_verify')
-
-
-#------------------ALL UPDATES AND DELETE(END)-------------------------------
-
-#--------------------------------------------------------------------------
-
-import razorpay
-from django.conf import settings
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-from datetime import datetime
-
-# Initialize Razorpay client
-client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET_KEY))
-# from django.views.decorators.http import require_POST
-
-
-from django.views.decorators.http import require_POST
-from django.http import JsonResponse
-from django.utils import timezone
-from datetime import datetime
-@require_POST
-def create_order(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({"error": "User is not authenticated"}, status=401)
-
-    # Fetch Data from POST Request
-    amount = request.POST.get("amount")  # Get amount as string
-    if not amount:
-        return JsonResponse({"error": "Amount is required"}, status=400)
-
-    try:
-        amount = int(float(amount) * 100)  # Convert to paise
-    except ValueError:
-        return JsonResponse({"error": "Invalid amount"}, status=400)
-
-    # Try to get start and end from POST, fallback to session
-    start = request.POST.get("start") or request.session.get("start")
-    end = request.POST.get("end") or request.session.get("end")
-
-    if not start or not end:
-        return JsonResponse({"error": "Start and end dates are required"}, status=400)
-
-    # Convert start and end strings to datetime objects
-    try:
-        start = timezone.make_aware(datetime.strptime(start, "%Y-%m-%dT%H:%M"))
-        end = timezone.make_aware(datetime.strptime(end, "%Y-%m-%dT%H:%M"))
-    except ValueError:
-        return JsonResponse({"error": "Invalid date format. Use 'YYYY-MM-DDTHH:MM'."}, status=400)
-
-    car_id = request.POST.get("car_id")
-    if not car_id:
-        return JsonResponse({"error": "Car ID is required"}, status=400)
-
-    try:
-        car = postVcl.objects.get(id=car_id)
-    except postVcl.DoesNotExist:
-        return JsonResponse({"error": "Car not found"}, status=404)
-    order_data={
-            "amount": amount,
-            "currency": "INR",
-            "payment_capture": "1",  # Auto capture payment
-    }
-    order=client.order.create(data=order_data)
-    # Create a new booking with status "Pending"
-    booking= Booking.objects.create(
-        car=car,
-        user=request.user,
-        start=start,
-        end=end,
-        razorpay_order_id=order["id"],  # Temporary value, will be updated after payment
-        amount=amount / 100,
-        payment_status="Pending",
-    )
-
-    context = {
-        "car": car,
-
-        "razorpay_api_key": settings.RAZORPAY_API_KEY, 
-        "order_id": booking.razorpay_order_id,  # Pass the order ID
-        "booking": booking,
-    }
-    
-    return render(request, "paymentD.html", context)
-
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+def verifyform(request):
+    return render(request,'verifyform.html')
 
 
 @login_required
@@ -594,52 +266,295 @@ def paymentD(request, car_id):
     
     print(f"Rendering payment template with booking ID: {booking.id}, order ID: {order['id']}")
     return render(request, "paymentD.html", context)
+#-------------------ALL USER END PAGES (END)------------------------------------
 
-def explore(request):
-    data = postVcl.objects.all()
+def paystatus(request):
+    # show = get_object_or_404(postVcl, id=id)
+    # data=get_object_or_404(veriform,id=id)
+     return render(request, "paystatus.html")#{'data': data, 'show': show})
+
+def payment(request,id):
+    show = get_object_or_404(postVcl, id=id)
+    data=get_object_or_404(veriform,id=id)
+    return render(request, "payment.html", {'data': data, 'show': show})
+
+
+@login_required
+def verify(request, email):  # Accept email as a parameter
+    user = get_object_or_404(veriform, email=email)  # Fetch the user by email
+    return render(request, 'verify.html', {'verify': user})  # Pass the user object to the template
+
+#-------------------ALL ADMIN END PAGES (START)-----------------------------------
+
+def dashboard(request):
+    allcars=postVcl.objects.count()
+    allbooking=Booking.objects.count()
+    allcontact=contactQ.objects.count()
+    allreg=CustomUser.objects.count()
+    allusers=veriform.objects.count()
+    return render(request,"dashboard.html",{'allcars':allcars,'allbooking':allbooking,'allcontact':allcontact,'allreg':allreg,'allusers':allusers})
+ 
+
+def admindash(request):
+    return render(request,"admindash.html")
+
+def postvehicle(request):
+    return render(request,"postvehicle.html")
+
+def vehiclemanage(request):
+    data=postVcl.objects.all()
+    return render(request,"vehiclemanage.html",{'data':data})
+
+def manageCQ(request):
+    bata=contactQ.objects.all()
+    return render(request,"manageCQ.html",{'bata':bata})
+
+def managereg(request):
+    bata=CustomUser.objects.all()
+    return render(request,"managereg.html",{'bata':bata}) 
+    
+def managebk(request):
+    bata=Booking.objects.all()
+    return render(request,"managebk.html",{'bata':bata})
+    
+
+def user_verify(request):
+    users = veriform.objects.all()  
+
+    context = {
+        'verifing': users  # Pass users to the template
+    }
+    # Update status dynamically based on is_verified field
+    # if user.is_verified:
+    #     user.status = "Approved"
+    # else:
+    #     user.status = "Pending"
+
+    # user.save()  # Save updated status to the database
+    messages.success(request, "Your details have been submitted successfully. Please wait until admin approves your request.")
+
+    return render(request, "user_verify.html", context)
+
+
+def logout(request):
+  request.session.flush()
+  return redirect('home')    
+
+
+#-------------------ALL ADMIN END PAGES (END)-----------------------------------
+
+#---------==---------ALL SAVES METHOD(START)--------------------------------------
+
+def savepost_v(request):
+    if request.method=="POST":
+        id=request.POST.get("id")
+        vehicle_title=request.POST.get("vehicle_title")
+        brand=request.POST.get("brand")
+        ppd=request.POST.get("ppd")
+        fuel=request.POST.get("ftype")
+        if not fuel:  # If empty, return an error
+            return render(request, "postvehicle.html", {"error": "Fuel type is required!"})
+        model_year=request.POST.get("myear")
+        sitting=request.POST.get("sc")
+        vo=request.POST.get("vo")
+        img1=request.FILES.get("img1")
+        img2=request.FILES.get("img2")
+        img3=request.FILES.get("img3")
+        b=postVcl.objects.create(id=id,vehicle_title=vehicle_title,brand=brand,PPD=ppd,fuel=fuel,model_year=model_year,setting=sitting,VO=vo,img1=img1,img2=img2,img3=img3)
+        b.save()
+    return render(request,"postvehicle.html")
+
+def savecontact(request):
+    if request.method=="POST":
+        name=request.POST.get('name')
+        useremail=request.POST.get('useremail')
+        phone_number=request.POST.get('phone_number')
+        date=request.POST.get('date')
+        msg=request.POST.get('msg')
+        c=contactQ.objects.create(name=name,useremail=useremail,phone_number=phone_number,date=date,msg=msg)
+        c.save()
+        messages.success(request, "✅ Your query has been submitted. We will respond shortly.")
+
+    return render(request,"contact.html")
+           
+def saveveriform(request):
     if request.method == "POST":
-        start = request.POST.get("start") or request.session.get("start")
-        end = request.POST.get("end") or request.session.get("end")
+        # Print all POST data for debugging
+        print("POST Data:", request.POST)
         
-        if not start or not end:
-            return JsonResponse({"error": "Start and end dates are required"}, status=400)
+        # Print all FILES data for debugging
+        print("FILES Data:", request.FILES)
+        
+        # Extract form data
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        Add = request.POST.get('Add')  # Ensure this field is being extracted
+        DLN = request.POST.get('DLN')
+        DLFI = request.FILES.get('DLFI')
+        DLBI = request.FILES.get('DLBI')
+        IDproof = request.POST.get('IDproof')
+        Addproof = request.FILES.get('Addproof')  # Corrected: This should be a file field
+        
+        # is_verified should be set by the admin, not the user
+        is_verified = False  # Default to False
+        
+        # Check if the Add field is missing
+        if not Add:
+            print("Add field is missing or empty!")
+            return HttpResponse("Address (Add) field is required.", status=400)
+        
+        # Save the data to the database
+        try:
+            d = veriform.objects.create(
+                name=name,
+                email=email,
+                phone=phone,
+                Add=Add,  # Ensure this field is included
+                DLN=DLN,
+                DLFI=DLFI,
+                DLBI=DLBI,
+                IDproof=IDproof,
+                Addproof=Addproof,
+                is_verified=is_verified  # Default to False
+            )
+            d.save()  # This will trigger the save method in the model
+            print("Data saved successfully!")
+            messages.success(request, "Your details have been submitted successfully. Please wait until admin approves your request.")
 
-        # Convert strings to datetime objects
-        # try:
-        #     start_date = datetime.strptime(start, '%Y-%m-%d')  # Adjust format as per your input
-        #     end_date = datetime.strptime(end, '%Y-%m-%d')
-        # except ValueError:
-        #     return JsonResponse({"error": "Invalid date format. Use YYYY-MM-DD."}, status=400)
-        # formatted_start_date = start.strftime('%Y-%m-%d')
-        # formatted_end_date = end.strftime('%Y-%m-%d')
+            return render(request, "verifyform.html")
+        except Exception as e:
+            print(f"Error saving data: {e}")
+            return HttpResponse(f"An error occurred: {e}", status=500)
+    else:
+        return HttpResponse("Invalid request method.", status=405)
 
-        # # Calculate the number of days
-        # num_days = (end - start).days
+    
+def verify(request, email):
+    email = unquote(email)  # Decode URL-encoded email
+    print(f"Received email in URL: {email}")  # Debugging
 
-        # if num_days <= 0:
-        #     num_days = 1  # At least 1 day
-
-        # Save the start, end, num_days, and amount in session
-        request.session["start"] = start
-        request.session["end"] = end
-        # request.session["num_days"] = num_days
-        request.session["amount"] = request.POST.get("amount")  
-        request.session.modified = True  # Ensure session updates
-
-        print("Session start date:", request.session.get("start"))  # Debugging
-        print("Session end date:", request.session.get("end"))  # Debugging
-        # print("Number of days:", num_days)
-
-    return render(request, "explore.html", {'data': data})
-
-from django.views.decorators.csrf import csrf_exempt
+    user = get_object_or_404(veriform, email=email)  # Fetch user safely
+    return render(request, "verify.html", {"verify": user})
 
 
-import razorpay
-from django.conf import settings
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
+#-----------------ALL UPDATES AND DELETE---------------------------------   
+
+# View to handle verification updates via AJAX
+def update_verification(request):
+    if request.method == "POST":
+        email = request.POST.get("user_email")
+        is_verified = request.POST.get("is_verified") == "true"
+
+        user = get_object_or_404(veriform, email=email)
+        user.is_verified = is_verified
+        user.status = "Approved" if is_verified else "Pending"
+        user.save()
+
+        return JsonResponse({"success": True, "message": "Verification updated successfully!"})
+
+    return JsonResponse({"success": False, "message": "Invalid request"}, status=400)
+
+
+def deletecar(request, id):
+    # Correct usage: Use the `contactQ` model
+    postVcl.objects.filter(id=id).delete()
+    return redirect('vehiclemanage')
+
+
+def deleteCQ(request, id):
+    # Correct usage: Use the `contactQ` model
+    contactQ.objects.filter(id=id).delete()
+    return redirect('manageCQ')
+
+def deletereg(request,useremail):
+    CustomUser.objects.filter(useremail=useremail).delete()
+    return redirect('managereg')
+
+def deleteuser(request, id):
+    # Correct usage: Use the `contactQ` model
+    veriform.objects.filter(id=id).delete()
+    return redirect('user_verify')
+def deletemanagebk(request, id):
+    Booking.objects.filter(id=id).delete()
+    return redirect('managebk')  # or your manage booking URL name
+
+
+#------------------ALL UPDATES AND DELETE(END)-------------------------------
+
+#--------------------------------------------------------------------------
+
+
+# Initialize Razorpay client
+client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET_KEY))
+# from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST
+@require_POST
+def create_order(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User is not authenticated"}, status=401)
+
+    # Fetch Data from POST Request
+    amount = request.POST.get("amount")  # Get amount as string
+    if not amount:
+        return JsonResponse({"error": "Amount is required"}, status=400)
+
+    try:
+        amount = int(float(amount) * 100)  # Convert to paise
+    except ValueError:
+        return JsonResponse({"error": "Invalid amount"}, status=400)
+
+    # Try to get start and end from POST, fallback to session
+    start = request.POST.get("start") or request.session.get("start")
+    end = request.POST.get("end") or request.session.get("end")
+
+    if not start or not end:
+        return JsonResponse({"error": "Start and end dates are required"}, status=400)
+
+    # Convert start and end strings to datetime objects
+    try:
+        start = timezone.make_aware(datetime.strptime(start, "%Y-%m-%dT%H:%M"))
+        end = timezone.make_aware(datetime.strptime(end, "%Y-%m-%dT%H:%M"))
+    except ValueError:
+        return JsonResponse({"error": "Invalid date format. Use 'YYYY-MM-DDTHH:MM'."}, status=400)
+
+    car_id = request.POST.get("car_id")
+    if not car_id:
+        return JsonResponse({"error": "Car ID is required"}, status=400)
+
+    try:
+        car = postVcl.objects.get(id=car_id)
+    except postVcl.DoesNotExist:
+        return JsonResponse({"error": "Car not found"}, status=404)
+    order_data={
+            "amount": amount,
+            "currency": "INR",
+            "payment_capture": "1",  # Auto capture payment
+    }
+    order=client.order.create(data=order_data)
+    # Create a new booking with status "Pending"
+    booking= Booking.objects.create(
+        car=car,
+        user=request.user,
+        start=start,
+        end=end,
+        razorpay_order_id=order["id"],  # Temporary value, will be updated after payment
+        amount=amount / 100,
+        payment_status="Pending",
+    )
+
+    context = {
+        "car": car,
+
+        "razorpay_api_key": settings.RAZORPAY_API_KEY, 
+        "order_id": booking.razorpay_order_id,  # Pass the order ID
+        "booking": booking,
+    }
+    
+    return render(request, "paymentD.html", context)
+
+
+
 
 client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET_KEY))
 
